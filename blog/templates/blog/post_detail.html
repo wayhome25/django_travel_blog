@@ -17,24 +17,27 @@
 
 </style>
 
-<script>
-$(function(){
-    var myLatLng = {lat: -25.363, lng: 231.044};
-    var container = $('.post-map')[0];
-    var map = new google.maps.Map(container, {
-      zoom: 4,
-      center: myLatLng
-    });
+{% if post.lnglat %}
+  <script>
+  $(function(){
+      var lat = {{ post.lat }}
+      var lng = {{ post.lng }}
+      var myLatLng = {lat: lat, lng: lng};
+      var container = $('.post-map')[0];
+      var map = new google.maps.Map(container, {
+        zoom: 12,
+        center: myLatLng
+      });
 
-    var marker = new google.maps.Marker({
-      position: myLatLng,
-      map: map,
-      title: 'Hello World!'
-    });
-});
-</script>
+      var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map,
+        title: 'Hello World!'
+      });
+  });
+  </script>
+{% endif %}
 <script src="https://maps.googleapis.com/maps/api/js"></script>
-
 
 {% endblock %}
 
