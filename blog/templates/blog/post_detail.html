@@ -55,9 +55,19 @@
           <hr>
           <div class="post-map"></div>
           {{ post.content|linebreaks }}
+          <hr>
+          {% for comment in post.comment_set.all %}
+          <li>
+              {{ comment.message }}
+              by {{ comment.author }}
+              at {{ comment.created_at }}
+          </li>
+          {% endfor %}
+
         </div>
         <div class="panel-footer">
           <a href="{% url "blog:index" %}" class="btn btn-default">목록으로</a>
+          <a href="{% url "blog:comment_new" post.pk  %}" class="btn btn-primary">댓글쓰기</a>
         </div>
       </div>
     </div>
