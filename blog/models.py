@@ -1,6 +1,7 @@
 import re
-from django.conf import settings
 from django import forms
+from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.db import models
 
 
@@ -42,3 +43,9 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['-id']
+
+    def get_edit_url(self):
+        return reverse('blog:comment_edit', args=[self.post.pk, self.pk])
+
+    def get_delete_url(self):
+        return reverse('blog:comment_delete', args=[self.post.pk, self.pk])

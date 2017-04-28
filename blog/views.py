@@ -18,7 +18,6 @@ def post_detail(request, pk):
 @login_required
 def comment_new(request, post_pk):
     post = get_object_or_404(Post, pk=post_pk)
-
     if request.method == 'POST':
         form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -31,4 +30,35 @@ def comment_new(request, post_pk):
         form = CommentForm()
     return render(request, 'blog/comment_form.html', {
         'form': form,
+    })
+
+@login_required
+def comment_edit(request, post_pk, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    if comment.author != request.user:
+        return redirect('blog:post_detail', post_pk)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST, request.FILES, instance=comment)
+        if form.is_valid():
+            comment = form.save()
+            return redirect('blog:post_detail', post_pk)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'blog/comment_form.html', {
+        'form': form,
+    })
+
+@login_required
+def comment_delete(request, post_pk, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    if comment.author != request.user:
+        return redirect('blog:post_detail', post_pk)
+
+    if request.method == 'POST':
+        comment.delete()
+        return redirect('blog:post_detail', post_pk)
+
+    return render(request, 'blog/comment_confirm_delete.html',{
+        'comment': comment,
     })
